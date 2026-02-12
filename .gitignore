@@ -1,0 +1,7 @@
+.htaccess
+BingSiteAuth.xml
+image-sitemap.xml
+sitemap.xml
+robots.txt
+node_modules
+.env
