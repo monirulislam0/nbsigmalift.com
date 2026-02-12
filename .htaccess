@@ -1,0 +1,37 @@
+# 1) Enable rewrite engine
+RewriteEngine On
+
+# 2) Force HTTPS and remove www
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteRule ^ https://nbsigmalift.com%{REQUEST_URI} [L,R=301]
+
+# 3) Set X-Robots-Tag for non-HTML files
+<IfModule mod_headers.c>
+  # Block truly low-value formats
+  <FilesMatch "\.(bmp|svg|zip|avi)$">
+    Header set X-Robots-Tag "noindex, nofollow"
+  </FilesMatch>
+  
+  # Allow valuable business content
+  <FilesMatch "\.(pdf|jpe?g|png|mp4|gif|webp|docx?|xlsx?|pptx?)$">
+    Header set X-Robots-Tag "index, follow"
+  </FilesMatch>
+  
+  # Ensure critical XML files are indexable
+  <FilesMatch "^(sitemap|image-sitemap|BingSiteAuth|robots)\.xml$">
+    Header set X-Robots-Tag "index, follow"
+  </FilesMatch>
+</IfModule>
+
+# 4) Internally rewrite to /public/
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteCond %{REQUEST_URI} !^/sitemap\.xml$
+RewriteCond %{REQUEST_URI} !^/image-sitemap\.xml$
+RewriteCond %{REQUEST_URI} !^/BingSiteAuth\.xml$
+RewriteCond %{REQUEST_URI} !^/robots\.txt$
+RewriteRule ^(.*)$ /public/$1 [L]
+
+# 5) Canonical redirects for duplicate content
+RewriteCond %{QUERY_STRING} !=""
+RewriteRule ^(.*)$ /$1? [R=301,L]

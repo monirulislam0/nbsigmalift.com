@@ -1,0 +1,28 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /includes/
+Disallow: /tmp/
+Disallow: /cgi-bin/
+Disallow: /config/
+Disallow: /backup/
+Disallow: /node_modules/
+Disallow: /vendor/
+Disallow: /.env
+Disallow: /*.html$
+
+# Uploads: Block folder but allow specific file types
+Disallow: /uploads/
+Allow: /uploads/*.jpg$
+Allow: /uploads/*.png$
+Allow: /uploads/*.gif$
+Allow: /uploads/*.webp$
+Allow: /uploads/*.pdf$ 
+
+# Content exclusion
+Disallow: /print/
+
+# Security blocks
+Disallow: /*/phpmyadmin/
+Disallow: /wp-admin/
+
+Sitemap: https://nbsigmalift.com/sitemap.xml
