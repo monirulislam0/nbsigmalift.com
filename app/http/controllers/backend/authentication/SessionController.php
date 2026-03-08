@@ -109,6 +109,7 @@ class SessionController
            [
              'password' => 'required|min:8',
              'old_password' => 'required',
+             'confirm_password' => 'required',
            ]
        );
 
@@ -126,6 +127,18 @@ class SessionController
         return back();
       }
 
+      // Additional server-side password match check
+      if($req->request('password') !== $req->request('confirm_password')) {
+        Session::flash('confirm_password', "New password and confirm password do not match !");
+        return back();
+      }
+
+      // Check if old password is different from new password
+      if($req->request('old_password') === $req->request('password')) {
+        Session::flash('password', "New password must be different from the current password !");
+        return back();
+      }
+
       //ac9689e2272427085e35b9d3e3e8bed88cb3434828b43b86fc0596cad4c6e270 
     $user = User::find($user['email'], 'email');
     $password = hash_make(trim($req->request('password')));
@@ -137,8 +150,4 @@ class SessionController
      return back();
 
     }
-
-
-
-
 }
